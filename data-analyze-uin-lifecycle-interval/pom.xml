@@ -8,9 +8,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>com.nd.data</groupId>
-    <artifactId>data-analyze-uin-lifecycle-intervale</artifactId>
+    <artifactId>data-analyze-uin-lifecycle-interval</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>data-analyze-uin-lifecycle-intervale</name>
+    <name>data-analyze-uin-lifecycle-interval</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -558,7 +558,7 @@
         <module>data-analyze-uin-active</module>
         
         <!-- 基于uin的生命周期跨度统计-->
-        <module>data-analyze-uin-lifecycle-intervale</module>
+        <module>data-analyze-uin-lifecycle-interval</module>
         
         <!-- 基于uin的生命周期登录天次统计-->
         <module>data-analyze-uin-lifecycle-times</module>
