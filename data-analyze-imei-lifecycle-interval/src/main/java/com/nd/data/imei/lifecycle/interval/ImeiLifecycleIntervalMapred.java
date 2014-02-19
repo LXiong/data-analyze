@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -95,7 +94,7 @@ public class ImeiLifecycleIntervalMapred {
          * 构造map out key
          *
          * @param typeEnum
-         * @param stateDate
+         * @param firstDate
          * @param product
          * @param platForm
          * @param channelId
@@ -103,7 +102,7 @@ public class ImeiLifecycleIntervalMapred {
          * @param intervalDays
          * @return
          */
-        private String createMapOutKey(LeaveTypeEnum typeEnum, String stateDate, String product, String platForm, String channelId, String productVersion, int intervalDays) {
+        private String createMapOutKey(LeaveTypeEnum typeEnum, String firstDate, String product, String platForm, String channelId, String productVersion, int intervalDays) {
             String leaveType;
             switch (typeEnum) {
                 case LEAVE01:
@@ -122,7 +121,7 @@ public class ImeiLifecycleIntervalMapred {
                     leaveType = "leave30";
             }
             final StringBuilder keyBuilder = new StringBuilder(128);
-            keyBuilder.append(stateDate).append('\t').append(intervalDays).append('\t')
+            keyBuilder.append(firstDate).append('\t').append(intervalDays).append('\t')
                     .append(leaveType).append('\t').append(product).append('\t')
                     .append(channelId).append('\t').append(platForm).append('\t')
                     .append(productVersion);
@@ -305,7 +304,7 @@ public class ImeiLifecycleIntervalMapred {
          * 获取mapper的输出信息，分组计算后输出用户生命周期统计的结果
          *
          * @param key
-         * stateDate,intervalDays,leaveType,product,channelId,platForm,productVersion,列之前用\t间隔
+         * firstDate,intervalDays,leaveType,product,channelId,platForm,productVersion,列之前用\t间隔
          * @param values imei的集合
          * @param context
          */
