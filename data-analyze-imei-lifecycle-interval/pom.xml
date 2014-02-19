@@ -65,7 +65,7 @@
                     </descriptors>
                     <archive>
                         <manifest>
-                            <mainClass>com.nd.data.analyze.imei.lifecycle.interval.JobStart</mainClass>
+                            <mainClass>com.nd.data.imei.lifecycle.interval.JobStart</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

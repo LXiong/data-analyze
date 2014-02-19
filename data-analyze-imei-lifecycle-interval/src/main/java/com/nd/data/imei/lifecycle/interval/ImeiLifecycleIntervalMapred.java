@@ -1,4 +1,4 @@
-package com.nd.data.analyze.imei.lifecycle.interval;
+package com.nd.data.imei.lifecycle.interval;
 
 import com.nd.mapred.PartitionUtils;
 import java.io.IOException;

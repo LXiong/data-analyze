@@ -1,4 +1,4 @@
-package com.nd.data.analyze.imei.lifecycle.interval;
+package com.nd.data.imei.lifecycle.interval;
 
 import com.nd.mapred.AbstractJobStart;
 import org.apache.hadoop.conf.Configuration;
@@ -14,7 +14,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
-import static com.nd.data.analyze.imei.lifecycle.interval.ImeiLifecycleIntervalMapred.*;
+import static com.nd.data.imei.lifecycle.interval.ImeiLifecycleIntervalMapred.*;
 
 /**
  *
