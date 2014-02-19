@@ -1,0 +1,14 @@
+{
+    "inputTableName": {
+        "value": "${inputTableName}",
+        "describe": "data imei产品用户总表名"
+    },
+    "stateDate": {
+        "value": "${stateDate}",
+        "describe": "统计时间，yyyy-mm-dd"
+    },
+    "outputPath": {
+        "value": "${outputPath}",
+        "describe": "统计结果hdfs文件输出路径"
+    }
+}
