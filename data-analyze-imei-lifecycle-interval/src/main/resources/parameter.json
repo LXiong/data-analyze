@@ -1,0 +1,14 @@
+{
+    "inputTableName": {
+        "value": "${inputTableName}",
+        "describe": "产品用户总表表名"
+    },
+    "stateDate": {
+        "value": "${stateDate}",
+        "describe": "统计时间"
+    },
+    "outputPath": {
+        "value": "${outputPath}",
+        "describe": "每日统计结果hdfs文件输出路径"
+    }
+}
