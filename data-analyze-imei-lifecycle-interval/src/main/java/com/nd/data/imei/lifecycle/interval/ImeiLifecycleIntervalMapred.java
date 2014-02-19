@@ -122,7 +122,7 @@ public class ImeiLifecycleIntervalMapred {
                     leaveType = "leave30";
             }
             final StringBuilder keyBuilder = new StringBuilder(128);
-            keyBuilder.append(intervalDays).append('\t')
+            keyBuilder.append(stateDate).append('\t').append(intervalDays).append('\t')
                     .append(leaveType).append('\t').append(product).append('\t')
                     .append(channelId).append('\t').append(platForm).append('\t')
                     .append(productVersion);
@@ -212,7 +212,7 @@ public class ImeiLifecycleIntervalMapred {
                         //用户在stateDate未1日流失
                         keyValue = this.createMapOutKey(
                                 LeaveTypeEnum.LEAVE01,
-                                this.stateDate,
+                                firstDate,
                                 product,
                                 platForm,
                                 channelId,
@@ -234,7 +234,7 @@ public class ImeiLifecycleIntervalMapred {
                         //用户在stateDate未1日流失
                         keyValue = this.createMapOutKey(
                                 LeaveTypeEnum.LEAVE07,
-                                this.stateDate,
+                                firstDate,
                                 product,
                                 platForm,
                                 channelId,
@@ -256,7 +256,7 @@ public class ImeiLifecycleIntervalMapred {
                         //用户在stateDate未14日流失
                         keyValue = this.createMapOutKey(
                                 LeaveTypeEnum.LEAVE14,
-                                this.stateDate,
+                                firstDate,
                                 product,
                                 platForm,
                                 channelId,
@@ -278,7 +278,7 @@ public class ImeiLifecycleIntervalMapred {
                         //用户在stateDate未30日流失
                         keyValue = this.createMapOutKey(
                                 LeaveTypeEnum.LEAVE30,
-                                this.stateDate,
+                                firstDate,
                                 product,
                                 platForm,
                                 channelId,
@@ -300,19 +300,12 @@ public class ImeiLifecycleIntervalMapred {
 
         private final Text newKey = new Text();
         private final Text newValue = new Text();
-        //统计时间
-        private String stateDate;
-
-        @Override
-        protected void setup(Context context) {
-            this.stateDate = context.getConfiguration().get(STATE_DATE_NAME);
-        }
 
         /**
          * 获取mapper的输出信息，分组计算后输出用户生命周期统计的结果
          *
          * @param key
-         * intervalDays,leaveType,product,channelId,platForm,productVersion,列之前用\t间隔
+         * stateDate,intervalDays,leaveType,product,channelId,platForm,productVersion,列之前用\t间隔
          * @param values imei的集合
          * @param context
          */
@@ -326,8 +319,8 @@ public class ImeiLifecycleIntervalMapred {
                 iterator.next();
             }
             StringBuilder keyBuilder = new StringBuilder(128);
-            keyBuilder.append(this.stateDate).append('\t')
-                    .append(key.toString()).append('\t').append(count);
+            keyBuilder.append(key.toString()).append('\t').append(count);
+            System.out.println(keyBuilder.toString());
             this.newKey.set(keyBuilder.toString());
             context.write(this.newKey, this.newValue);
         }
