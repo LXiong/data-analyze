@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<!-- variable define -->
+
+        <property>
+                <name>local.realm</name>
+                <value>LONGZHOU.DSCC</value>
+        </property>
+
+        <property>
+                <name>local.namenode</name>
+                <value>longzhou-hdpnn.lz.dscc</value>
+        </property>
+
+        <property>
+                <name>local.jobtracker</name>
+                <value>longzhou-hdpnn.lz.dscc</value>
+        </property>
+
+
+
+        <!-- file system properties -->
+
+        <property>
+                <name>fs.default.name</name>
+                <!--            <value>hdfs://${local.namenode}:11000/</value>-->
+                <value>hdfs://longzhou-hdpnn.lz.dscc:11000/</value>
+                <final>true</final>
+                <description>
+                        The name of the default file system.
+                        A URI whose  scheme and authority determine the FileSystem implementation.
+                        The  uri's scheme determines the config property (fs.SCHEME.impl) naming  the FileSystem implementation class.
+                        The uri's authority is used to  determine the host, port, etc. for a filesystem.
+                </description>
+        </property>
+
+        <property>
+                <name>hadoop.tmp.dir</name>
+                <value>/home/${user.name}/hadoop/hadoop-data</value>
+                <final>true</final>
+                <description>
+                        A base for other temporary directories. on servers, must be set final.
+                </description>
+        </property>
+        <!-- fs option -->
+        <property>
+                <name>fs.trash.interval</name>
+                <value>1440</value>
+                <description>
+                        Number of minutes between trash checkpoints.  If zero, the trash feature is disabled.
+                </description>
+        </property>
+
+        <!-- hadoop security conf -->
+
+        <property>
+                <name>hadoop.security.authentication</name>
+                <value>kerberos</value>
+                <description>
+                Set the authentication for the cluster. Valid values are: simple or kerberos.
+                </description>
+        </property>
+
+        <property>
+                <name>hadoop.security.authorization</name>
+                <value>true</value>
+                <description>
+                        Enable authorization for different protocols.
+                </description>
+        </property>
+
+        <property>
+                <name>hadoop.security.use-weak-http-crypto</name>
+                <value>false</value>
+        </property>
+
+</configuration>
