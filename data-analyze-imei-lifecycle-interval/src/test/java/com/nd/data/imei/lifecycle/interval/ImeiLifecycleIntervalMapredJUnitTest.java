@@ -392,7 +392,8 @@ public class ImeiLifecycleIntervalMapredJUnitTest {
         //
         "2014-01-01	6	leave30	1	1	1	1	3",
         //
-        "2014-01-01	7	leave30	1	1	1	1	3",};
+        "2014-01-01	7	leave30	1	1	1	1	3"
+    };
 
     @Test
     public void reducerTest() throws IOException {

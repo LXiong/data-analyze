@@ -13,6 +13,8 @@ public class HbaseTableUtil {
     public final static byte[] COLUMN_FAMILY = Bytes.toBytes("INFO");
     //imei
     public final static byte[] IMEI = Bytes.toBytes("imei");
+    //uin
+    public final static byte[] UIN = Bytes.toBytes("uin");
     //首次登录时间
     public final static byte[] FIRST_DATE = Bytes.toBytes("firstDate");
     //最后登录时间
