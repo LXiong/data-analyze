@@ -45,4 +45,6 @@ public class HbaseTableUtil {
     public final static byte[] LEAVE14_CNT = Bytes.toBytes("leave14Cnt");
     //30日流失时间
     public final static byte[] LEAVE30_CNT = Bytes.toBytes("leave30Cnt");
+    //最后修改日期
+    public final static byte[] LAST_UPDATE_DATE = Bytes.toBytes("lastUpdateDate");
 }

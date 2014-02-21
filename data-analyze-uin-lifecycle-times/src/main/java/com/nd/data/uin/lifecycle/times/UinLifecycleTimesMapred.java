@@ -80,13 +80,14 @@ public class UinLifecycleTimesMapred {
             return result;
         }
 
-        private void updateLeaveCnt(byte[] leaveField, String product, String imei, String loginCnt) throws IOException {
+        private void updateLeaveCnt(byte[] leaveField, String product, String imei, String loginCnt, String lastUpdateDate) throws IOException {
             String part = PartitionUtils.getPartition(product);
             StringBuilder keyBuilder = new StringBuilder(36);
             keyBuilder.append(part).append('_').append(product).append('_').append(imei);
             String rowKey = keyBuilder.toString();
             Put put = new Put(Bytes.toBytes(rowKey));
             put.add(COLUMN_FAMILY, leaveField, Bytes.toBytes(loginCnt));
+            put.add(COLUMN_FAMILY, LAST_UPDATE_DATE, Bytes.toBytes(lastUpdateDate));
             this.hTable.put(put);
         }
 
@@ -133,7 +134,7 @@ public class UinLifecycleTimesMapred {
                         } else {
                             //当前首次流失
                             //更新当前流失类型的登录天次为该用户累计登录天次
-                            this.updateLeaveCnt(leaveField, product, uin, loginCnt);
+                            this.updateLeaveCnt(leaveField, product, uin, loginCnt, this.stateDate);
                             //登录天次为该用户累计登录天次
                             loginTimes = Integer.parseInt(loginCnt);
                         }

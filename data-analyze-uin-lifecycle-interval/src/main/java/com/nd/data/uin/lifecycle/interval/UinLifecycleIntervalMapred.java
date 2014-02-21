@@ -80,13 +80,14 @@ public class UinLifecycleIntervalMapred {
             return result;
         }
 
-        private void updateLeaveDate(byte[] leaveField, String product, String uin, String leaveDate) throws IOException {
+        private void updateLeaveDate(byte[] leaveField, String product, String uin, String leaveDate, String lastUpdateDate) throws IOException {
             String part = PartitionUtils.getPartition(product);
             StringBuilder keyBuilder = new StringBuilder(36);
             keyBuilder.append(part).append('_').append(product).append('_').append(uin);
             String rowKey = keyBuilder.toString();
             Put put = new Put(Bytes.toBytes(rowKey));
             put.add(COLUMN_FAMILY, leaveField, Bytes.toBytes(leaveDate));
+            put.add(COLUMN_FAMILY, LAST_UPDATE_DATE, Bytes.toBytes(lastUpdateDate));
             this.hTable.put(put);
         }
 
@@ -136,7 +137,7 @@ public class UinLifecycleIntervalMapred {
                         } else {
                             //当前首次流失
                             //更新当前流失类型的流失时间为lastDate
-                            this.updateLeaveDate(leaveField, product, uin, lastDate);
+                            this.updateLeaveDate(leaveField, product, uin, lastDate, this.stateDate);
                             //计算间隔天数，间隔天数为lastDate到stateDate的间隔天数
                             intervalDays = this.getIntervalDays(firstDate, lastDate);
                         }
