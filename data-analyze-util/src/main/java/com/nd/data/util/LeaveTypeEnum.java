@@ -23,6 +23,11 @@ public enum LeaveTypeEnum {
         public byte[] getLeaveField() {
             return LEAVE01_DATE;
         }
+        
+        @Override
+        public byte[] getLeaveCntField() {
+            return LEAVE01_CNT;
+        }
     },
     LEAVE07 {
         @Override
@@ -38,6 +43,11 @@ public enum LeaveTypeEnum {
         @Override
         public byte[] getLeaveField() {
             return LEAVE07_DATE;
+        }
+        
+        @Override
+        public byte[] getLeaveCntField() {
+            return LEAVE07_CNT;
         }
     },
     LEAVE14 {
@@ -55,6 +65,11 @@ public enum LeaveTypeEnum {
         public byte[] getLeaveField() {
             return LEAVE14_DATE;
         }
+        
+        @Override
+        public byte[] getLeaveCntField() {
+            return LEAVE14_CNT;
+        }
     },
     LEAVE30 {
         @Override
@@ -70,6 +85,11 @@ public enum LeaveTypeEnum {
         @Override
         public byte[] getLeaveField() {
             return LEAVE30_DATE;
+        }
+        
+        @Override
+        public byte[] getLeaveCntField() {
+            return LEAVE30_CNT;
         }
     };
 
@@ -88,9 +108,15 @@ public enum LeaveTypeEnum {
     public abstract int getMaxInterval();
 
     /**
-     * 获取流失标志字段
+     * 获取跨度统计流失标志字段
      *
      * @return
      */
     public abstract byte[] getLeaveField();
+    
+    /**
+     * 获取天次统计流失标志字段
+     * @return 
+     */
+    public abstract byte[] getLeaveCntField();
 }

@@ -35,4 +35,14 @@ public class HbaseTableUtil {
     public final static byte[] LEAVE14_DATE = Bytes.toBytes("leave14Date");
     //30日流失时间
     public final static byte[] LEAVE30_DATE = Bytes.toBytes("leave30Date");
+    //累计登录天次
+    public final static byte[] LOGIN_CNT = Bytes.toBytes("loginCnt");
+    //1日流失时间
+    public final static byte[] LEAVE01_CNT = Bytes.toBytes("leave01Cnt");
+    //7日流失时间
+    public final static byte[] LEAVE07_CNT = Bytes.toBytes("leave07Cnt");
+    //14日流失时间
+    public final static byte[] LEAVE14_CNT = Bytes.toBytes("leave14Cnt");
+    //30日流失时间
+    public final static byte[] LEAVE30_CNT = Bytes.toBytes("leave30Cnt");
 }

@@ -21,6 +21,10 @@
             <groupId>com.nd</groupId>
             <artifactId>91-user-soft-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.nd.data</groupId>
+            <artifactId>data-analyze-util</artifactId>
+        </dependency>
         <!--第三方包-->
         <dependency>
             <groupId>org.apache.mrunit</groupId>
