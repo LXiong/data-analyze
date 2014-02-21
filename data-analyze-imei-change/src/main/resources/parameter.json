@@ -1,0 +1,14 @@
+{
+    "inputTableName": {
+        "value": "${inputTableName}",
+        "describe": "产品用户总表表名"
+    },
+    "stateDate": {
+        "value": "${stateDate}",
+        "describe": "统计时间,产品用户信息更新时间大等于stateDate的记录才会输出"
+    },
+    "outputPath": {
+        "value": "${outputPath}",
+        "describe": "总表变化结果hdfs文件输出路径"
+    }
+}
