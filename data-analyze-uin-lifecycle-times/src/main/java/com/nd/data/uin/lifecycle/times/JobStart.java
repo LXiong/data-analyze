@@ -5,16 +5,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
-import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import static com.nd.data.uin.lifecycle.times.UinLifecycleTimesMapred.*;
+import static com.nd.data.util.HbaseTableUtil.*;
 
 /**
  *
@@ -52,9 +49,6 @@ public class JobStart extends AbstractJobStart {
         scan.addColumn(COLUMN_FAMILY, LEAVE07_CNT);
         scan.addColumn(COLUMN_FAMILY, LEAVE14_CNT);
         scan.addColumn(COLUMN_FAMILY, LEAVE30_CNT);
-        //获取30日未失效的用户记录
-        final Filter filter = new SingleColumnValueFilter(COLUMN_FAMILY, LEAVE30_CNT, CompareOp.EQUAL, Bytes.toBytes(""));
-        scan.setFilter(filter);
         scan.setCaching(500);
         TableMapReduceUtil.initTableMapperJob(
                 inputTableName,
