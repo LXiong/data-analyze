@@ -577,5 +577,6 @@
         <module>data-analyze-uin-lifecycle-times</module>
         <module>data-analyze-util</module>
     <module>data-analyze-imei-change</module>
+    <module>data-analyze-uin-change</module>
   </modules>
 </project>
