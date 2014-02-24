@@ -146,7 +146,7 @@ public class ImeiLifecycleIntervalMapred {
                         leaveField = leaveTypeEnum.getLeaveField();
                         leaveDate = Bytes.toString(value.getValue(COLUMN_FAMILY, leaveField));
                         //计算间隔天数
-                        if (leaveDate != null && leaveDate.isEmpty()) {
+                        if (leaveDate == null || leaveDate.isEmpty()) {
                             //未流失，计算流失间隔，为lastDate到stateDate的自然日跨度天数
                             int leaveDays = this.getIntervalDays(lastDate, this.stateDate);
                             //判断是否流失
