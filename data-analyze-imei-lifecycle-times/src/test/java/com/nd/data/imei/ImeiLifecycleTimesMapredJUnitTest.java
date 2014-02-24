@@ -1,5 +1,6 @@
-package com.nd.data.imei.lifecycle.times;
+package com.nd.data.imei;
 
+import com.nd.data.imei.ImeiLifecycleTimesMapred;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static com.nd.data.imei.lifecycle.times.ImeiLifecycleTimesMapred.*;
+import static com.nd.data.imei.ImeiLifecycleTimesMapred.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
