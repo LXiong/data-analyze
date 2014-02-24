@@ -11,7 +11,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import static com.nd.data.util.HbaseTableUtil.*;
-import static com.nd.data.imei.ImeiChangeMapred.*;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
@@ -52,12 +51,12 @@ public class ImeiChangeJobStart extends AbstractJobStart {
         TableMapReduceUtil.initTableMapperJob(
                 inputTableName,
                 scan,
-                MyMapper.class,
+                ImeiChangeMapred.MyMapper.class,
                 Text.class,
                 Text.class,
                 job);
         //设置hdfs输出
-        job.setReducerClass(MyReducer.class);
+        job.setReducerClass(ImeiChangeMapred.MyReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
