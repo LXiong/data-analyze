@@ -49,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -69,7 +74,7 @@
                     </descriptors>
                     <archive>
                         <manifest>
-                            <mainClass>com.nd.data.imei.lifecycle.interval.JobStart</mainClass>
+                            <mainClass>com.nd.data.imei.ImeiLifecycleIntervalJobStart</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
