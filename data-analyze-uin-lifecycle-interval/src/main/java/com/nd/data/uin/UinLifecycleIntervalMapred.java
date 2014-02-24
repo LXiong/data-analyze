@@ -1,4 +1,4 @@
-package com.nd.data.uin.lifecycle.interval;
+package com.nd.data.uin;
 
 import com.nd.mapred.PartitionUtils;
 import java.io.IOException;
@@ -16,6 +16,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import static com.nd.data.util.HbaseTableUtil.*;
 import com.nd.data.util.LeaveTypeEnum;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -41,6 +43,10 @@ public class UinLifecycleIntervalMapred {
         private final Text newValue = new Text();
         //间隔天数集合
         private final int[] days = {1, 2, 3, 4, 5, 6, 7, 14, 21, 30};
+        private final String[] fields = {
+            "uin", "firstDate", "lastDate", "product", "channelId", "platForm",
+            "productVersion"
+        };
 
         /**
          * mapper 初始化
@@ -103,65 +109,80 @@ public class UinLifecycleIntervalMapred {
         @Override
         public void map(ImmutableBytesWritable key, Result value, Context context) throws IOException, InterruptedException {
             if (value != null) {
-                final String uin = Bytes.toString(value.getValue(COLUMN_FAMILY, UIN));
-                final String firstDate = Bytes.toString(value.getValue(COLUMN_FAMILY, FIRST_DATE));
-                final String lastDate = Bytes.toString(value.getValue(COLUMN_FAMILY, LAST_DATE));
-                final String product = Bytes.toString(value.getValue(COLUMN_FAMILY, PRODUCT));
-                final String channelId = Bytes.toString(value.getValue(COLUMN_FAMILY, CHANNEL_ID));
-                final String platForm = Bytes.toString(value.getValue(COLUMN_FAMILY, PLAT_FORM));
-                final String productVersion = Bytes.toString(value.getValue(COLUMN_FAMILY, PRODUCT_VERSION));
-                final String leave01Date = Bytes.toString(value.getValue(COLUMN_FAMILY, LEAVE01_DATE));
-                final String leave07Date = Bytes.toString(value.getValue(COLUMN_FAMILY, LEAVE07_DATE));
-                final String leave14Date = Bytes.toString(value.getValue(COLUMN_FAMILY, LEAVE14_DATE));
-                final String leave30Date = Bytes.toString(value.getValue(COLUMN_FAMILY, LEAVE30_DATE));
-                //遍历所有流失统计方式
-                String leaveType;
-                int maxInterval;
-                byte[] leaveField;
-                String leaveDate;
-                int intervalDays;
-                for (LeaveTypeEnum leaveTypeEnum : LeaveTypeEnum.values()) {
-                    leaveType = leaveTypeEnum.getLeaveType();
-                    maxInterval = leaveTypeEnum.getMaxInterval();
-                    leaveField = leaveTypeEnum.getLeaveField();
-                    leaveDate = Bytes.toString(value.getValue(COLUMN_FAMILY, leaveField));
-                    //计算间隔天数
-                    if (leaveDate.isEmpty()) {
-                        //未流失，计算流失间隔，为lastDate到stateDate的自然日跨度天数
-                        int leaveDays = this.getIntervalDays(lastDate, this.stateDate);
-                        //判断是否流失
-                        if (leaveDays <= maxInterval) {
-                            //当前未流失
-                            //计算间隔天数，间隔天数为firstDate到stateDate的间隔天数
-                            intervalDays = this.getIntervalDays(firstDate, this.stateDate);
-                        } else {
-                            //当前首次流失
-                            //更新当前流失类型的流失时间为lastDate
-                            this.updateLeaveDate(leaveField, product, uin, lastDate, this.stateDate);
-                            //计算间隔天数，间隔天数为lastDate到stateDate的间隔天数
-                            intervalDays = this.getIntervalDays(firstDate, lastDate);
-                        }
+                Map<String, String> fieldValueMap = new HashMap<String, String>(this.fields.length, 1);
+                boolean flag = true;
+                //取值，并验证记录是否合法
+                String fieldName;
+                String fieldValue;
+                for (int index = 0; index < this.fields.length; index++) {
+                    fieldName = this.fields[index];
+                    fieldValue = Bytes.toString(value.getValue(COLUMN_FAMILY, Bytes.toBytes(fieldName)));
+                    if (fieldValue == null) {
+                        //字段为null，该记录无效
+                        flag = false;
+                        break;
                     } else {
-                        //已流失，则间隔天数为firstDate到leaveDate的间隔天数
-                        intervalDays = this.getIntervalDays(firstDate, leaveDate);
+                        fieldValueMap.put(fieldName, fieldValue);
                     }
-                    //将间隔天数转换成对应的间隔天数统计集合
-                    final StringBuilder keyBuilder = new StringBuilder(128);
-                    this.newValue.set(uin);
-                    for (int index = 0; index < this.days.length; index++) {
-                        if (this.days[index] <= intervalDays) {
-                            keyBuilder.append(firstDate).append('\t').append(this.days[index]).append('\t')
-                                    .append(leaveType).append('\t').append(product).append('\t')
-                                    .append(channelId).append('\t').append(platForm).append('\t')
-                                    .append(productVersion);
-                            this.newKey.set(keyBuilder.toString());
-                            context.write(this.newKey, this.newValue);
-                            keyBuilder.setLength(0);
+                }
+                if (flag) {
+                    //有效记录
+                    String uin = fieldValueMap.get("uin");
+                    String firstDate = fieldValueMap.get("firstDate");
+                    String lastDate = fieldValueMap.get("lastDate");
+                    String product = fieldValueMap.get("product");
+                    String channelId = fieldValueMap.get("channelId");
+                    String platForm = fieldValueMap.get("platForm");
+                    String productVersion = fieldValueMap.get("productVersion");
+                    //遍历所有流失统计方式
+                    String leaveType;
+                    int maxInterval;
+                    byte[] leaveField;
+                    String leaveDate;
+                    int intervalDays;
+                    for (LeaveTypeEnum leaveTypeEnum : LeaveTypeEnum.values()) {
+                        leaveType = leaveTypeEnum.getLeaveType();
+                        maxInterval = leaveTypeEnum.getMaxInterval();
+                        leaveField = leaveTypeEnum.getLeaveField();
+                        leaveDate = Bytes.toString(value.getValue(COLUMN_FAMILY, leaveField));
+                        //计算间隔天数
+                        if (leaveDate == null || leaveDate.isEmpty()) {
+                            //未流失，计算流失间隔，为lastDate到stateDate的自然日跨度天数
+                            int leaveDays = this.getIntervalDays(lastDate, this.stateDate);
+                            //判断是否流失
+                            if (leaveDays <= maxInterval) {
+                                //当前未流失
+                                //计算间隔天数，间隔天数为firstDate到stateDate的间隔天数
+                                intervalDays = this.getIntervalDays(firstDate, this.stateDate);
+                            } else {
+                                //当前首次流失
+                                //更新当前流失类型的流失时间为lastDate
+                                this.updateLeaveDate(leaveField, product, uin, lastDate, this.stateDate);
+                                //计算间隔天数，间隔天数为lastDate到stateDate的间隔天数
+                                intervalDays = this.getIntervalDays(firstDate, lastDate);
+                            }
                         } else {
-                            break;
+                            //已流失，则间隔天数为firstDate到leaveDate的间隔天数
+                            intervalDays = this.getIntervalDays(firstDate, leaveDate);
                         }
-                    }
+                        //将间隔天数转换成对应的间隔天数统计集合
+                        final StringBuilder keyBuilder = new StringBuilder(128);
+                        this.newValue.set(uin);
+                        for (int index = 0; index < this.days.length; index++) {
+                            if (this.days[index] <= intervalDays) {
+                                keyBuilder.append(firstDate).append('\t').append(this.days[index]).append('\t')
+                                        .append(leaveType).append('\t').append(product).append('\t')
+                                        .append(channelId).append('\t').append(platForm).append('\t')
+                                        .append(productVersion);
+                                this.newKey.set(keyBuilder.toString());
+                                context.write(this.newKey, this.newValue);
+                                keyBuilder.setLength(0);
+                            } else {
+                                break;
+                            }
+                        }
 
+                    }
                 }
             }
         }

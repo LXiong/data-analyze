@@ -1,4 +1,4 @@
-package com.nd.data.uin.lifecycle.interval;
+package com.nd.data.uin;
 
 import com.nd.mapred.AbstractJobStart;
 import org.apache.hadoop.conf.Configuration;
@@ -10,18 +10,17 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
-import static com.nd.data.uin.lifecycle.interval.UinLifecycleIntervalMapred.*;
 import static com.nd.data.util.HbaseTableUtil.*;
 
 /**
  *
  * @author aladdin
  */
-public class JobStart extends AbstractJobStart {
+public class UinLifecycleIntervalJobStart extends AbstractJobStart {
 
     public static void main(String[] args) throws Exception {
         Configuration config = HBaseConfiguration.create();
-        int res = ToolRunner.run(config, new JobStart(), args);
+        int res = ToolRunner.run(config, new UinLifecycleIntervalJobStart(), args);
         System.exit(res);
     }
 
@@ -34,6 +33,9 @@ public class JobStart extends AbstractJobStart {
         final String outputPath = this.getParameter("outputPath");
         //初始化job
         final Job job = new Job(conf, "data-analyze-uin-lifecycle-interval");
+        job.setJarByClass(UinLifecycleIntervalMapred.class);
+        //初始化kerbros
+        TableMapReduceUtil.initCredentials(job);
         //设置hbase输入
         final Scan scan = new Scan();
         scan.setMaxVersions();
@@ -53,20 +55,18 @@ public class JobStart extends AbstractJobStart {
         TableMapReduceUtil.initTableMapperJob(
                 inputTableName,
                 scan,
-                MyMapper.class,
+                UinLifecycleIntervalMapred.MyMapper.class,
                 Text.class,
                 Text.class,
                 job);
         //设置环境变量
-        job.getConfiguration().set(STATE_DATE_NAME, stateDate);
-        job.getConfiguration().set(TABLE_NAME, inputTableName);
+        job.getConfiguration().set(UinLifecycleIntervalMapred.STATE_DATE_NAME, stateDate);
+        job.getConfiguration().set(UinLifecycleIntervalMapred.TABLE_NAME, inputTableName);
         //设置hdfs输出
-        job.setReducerClass(MyReducer.class);
+        job.setReducerClass(UinLifecycleIntervalMapred.MyReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
-        //初始化kerbros
-        TableMapReduceUtil.initCredentials(job);
         return job;
     }
 

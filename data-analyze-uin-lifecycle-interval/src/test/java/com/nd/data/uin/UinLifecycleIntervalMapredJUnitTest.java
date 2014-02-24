@@ -1,5 +1,6 @@
-package com.nd.data.uin.lifecycle.interval;
+package com.nd.data.uin;
 
+import com.nd.data.uin.UinLifecycleIntervalMapred;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static com.nd.data.uin.lifecycle.interval.UinLifecycleIntervalMapred.*;
+import static com.nd.data.uin.UinLifecycleIntervalMapred.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
