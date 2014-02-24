@@ -69,7 +69,7 @@
                     </descriptors>
                     <archive>
                         <manifest>
-                            <mainClass>com.nd.data.imei.ChangeJobStart</mainClass>
+                            <mainClass>com.nd.data.imei.ImeiChangeJobStart</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

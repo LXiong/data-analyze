@@ -21,11 +21,11 @@ import org.apache.hadoop.hbase.util.Bytes;
  *
  * @author aladdin
  */
-public class ChangeJobStart extends AbstractJobStart {
+public class ImeiChangeJobStart extends AbstractJobStart {
 
     public static void main(String[] args) throws Exception {
         Configuration config = HBaseConfiguration.create();
-        int res = ToolRunner.run(config, new ChangeJobStart(), args);
+        int res = ToolRunner.run(config, new ImeiChangeJobStart(), args);
         System.exit(res);
     }
 
@@ -38,6 +38,9 @@ public class ChangeJobStart extends AbstractJobStart {
         final String outputPath = this.getParameter("outputPath");
         //初始化job
         final Job job = new Job(conf, "data-analyze-imei-change");
+        job.setJarByClass(ImeiChangeMapred.class);
+        //初始化kerbros
+        TableMapReduceUtil.initCredentials(job);
         //设置hbase输入
         final Scan scan = new Scan();
         scan.setMaxVersions();
@@ -58,8 +61,8 @@ public class ChangeJobStart extends AbstractJobStart {
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
-        //初始化kerbros
-        TableMapReduceUtil.initCredentials(job);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
         return job;
     }
 
