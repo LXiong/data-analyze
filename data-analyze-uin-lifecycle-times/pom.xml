@@ -69,7 +69,7 @@
                     </descriptors>
                     <archive>
                         <manifest>
-                            <mainClass>com.nd.data.uin.lifecycle.times.JobStart</mainClass>
+                            <mainClass>com.nd.data.uin.UinLifecycleTimesJobStart</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

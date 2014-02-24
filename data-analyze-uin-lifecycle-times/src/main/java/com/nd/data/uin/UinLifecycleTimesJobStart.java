@@ -1,4 +1,4 @@
-package com.nd.data.uin.lifecycle.times;
+package com.nd.data.uin;
 
 import com.nd.mapred.AbstractJobStart;
 import org.apache.hadoop.conf.Configuration;
@@ -10,18 +10,17 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
-import static com.nd.data.uin.lifecycle.times.UinLifecycleTimesMapred.*;
 import static com.nd.data.util.HbaseTableUtil.*;
 
 /**
  *
  * @author aladdin
  */
-public class JobStart extends AbstractJobStart {
+public class UinLifecycleTimesJobStart extends AbstractJobStart {
 
     public static void main(String[] args) throws Exception {
         Configuration config = HBaseConfiguration.create();
-        int res = ToolRunner.run(config, new JobStart(), args);
+        int res = ToolRunner.run(config, new UinLifecycleTimesJobStart(), args);
         System.exit(res);
     }
 
@@ -34,6 +33,9 @@ public class JobStart extends AbstractJobStart {
         final String outputPath = this.getParameter("outputPath");
         //初始化job
         final Job job = new Job(conf, "data-analyze-uin-lifecycle-times");
+        job.setJarByClass(UinLifecycleTimesMapred.class);
+        //初始化kerbros
+        TableMapReduceUtil.initCredentials(job);
         //设置hbase输入
         final Scan scan = new Scan();
         scan.setMaxVersions();
@@ -45,6 +47,7 @@ public class JobStart extends AbstractJobStart {
         scan.addColumn(COLUMN_FAMILY, CHANNEL_ID);
         scan.addColumn(COLUMN_FAMILY, PLAT_FORM);
         scan.addColumn(COLUMN_FAMILY, PRODUCT_VERSION);
+        scan.addColumn(COLUMN_FAMILY, LOGIN_CNT);
         scan.addColumn(COLUMN_FAMILY, LEAVE01_CNT);
         scan.addColumn(COLUMN_FAMILY, LEAVE07_CNT);
         scan.addColumn(COLUMN_FAMILY, LEAVE14_CNT);
@@ -53,20 +56,20 @@ public class JobStart extends AbstractJobStart {
         TableMapReduceUtil.initTableMapperJob(
                 inputTableName,
                 scan,
-                MyMapper.class,
+                UinLifecycleTimesMapred.MyMapper.class,
                 Text.class,
                 Text.class,
                 job);
         //设置环境变量
-        job.getConfiguration().set(STATE_DATE_NAME, stateDate);
-        job.getConfiguration().set(TABLE_NAME, inputTableName);
+        job.getConfiguration().set(UinLifecycleTimesMapred.STATE_DATE_NAME, stateDate);
+        job.getConfiguration().set(UinLifecycleTimesMapred.TABLE_NAME, inputTableName);
         //设置hdfs输出
-        job.setReducerClass(MyReducer.class);
+        job.setReducerClass(UinLifecycleTimesMapred.MyReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
-        //初始化kerbros
-        TableMapReduceUtil.initCredentials(job);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
         return job;
     }
 
