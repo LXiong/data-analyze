@@ -11,7 +11,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import static com.nd.data.util.HbaseTableUtil.*;
-import static com.nd.data.uin.UinChangeMapred.*;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
@@ -21,11 +20,11 @@ import org.apache.hadoop.hbase.util.Bytes;
  *
  * @author aladdin
  */
-public class ChangeJobStart extends AbstractJobStart {
+public class UinChangeJobStart extends AbstractJobStart {
 
     public static void main(String[] args) throws Exception {
         Configuration config = HBaseConfiguration.create();
-        int res = ToolRunner.run(config, new ChangeJobStart(), args);
+        int res = ToolRunner.run(config, new UinChangeJobStart(), args);
         System.exit(res);
     }
 
@@ -38,6 +37,9 @@ public class ChangeJobStart extends AbstractJobStart {
         final String outputPath = this.getParameter("outputPath");
         //初始化job
         final Job job = new Job(conf, "data-analyze-uin-change");
+        job.setJarByClass(UinChangeMapred.class);
+        //初始化kerbros
+        TableMapReduceUtil.initCredentials(job);
         //设置hbase输入
         final Scan scan = new Scan();
         scan.setMaxVersions();
@@ -49,17 +51,17 @@ public class ChangeJobStart extends AbstractJobStart {
         TableMapReduceUtil.initTableMapperJob(
                 inputTableName,
                 scan,
-                MyMapper.class,
+                UinChangeMapred.MyMapper.class,
                 Text.class,
                 Text.class,
                 job);
         //设置hdfs输出
-        job.setReducerClass(MyReducer.class);
+        job.setReducerClass(UinChangeMapred.MyReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
-        //初始化kerbros
-        TableMapReduceUtil.initCredentials(job);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
         return job;
     }
 
