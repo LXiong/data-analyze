@@ -1,0 +1,26 @@
+{
+    "inputPath": {
+        "value": "${inputPath}",
+        "describe": "每日用户活跃度hdfs文件输入路径"
+    },
+    "tableName": {
+        "value": "${tableName}",
+        "describe": "写入hbase表名"
+    },
+    "outputPath": {
+        "value": "${outputPath}",
+        "describe": "每日用户活跃度hdfs文件输出路径"
+    },
+    "loadFactor": {
+        "value": "${loadFactor}",
+        "describe": "负载系数，根据目标Hbase的region数量除以该系数得到reducer的数量"
+    },
+    "distance": {
+        "value": "${distance}",
+        "describe": "相同region server下，读取region的距离"
+    },
+    "numReducerTask": {
+            "value": "${numReducerTask}",
+            "describe": "reducer task num数量"
+    }
+}
