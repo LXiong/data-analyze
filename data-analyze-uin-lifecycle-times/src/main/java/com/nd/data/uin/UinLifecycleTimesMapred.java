@@ -170,7 +170,7 @@ public class UinLifecycleTimesMapred {
                         this.newValue.set(uin);
                         for (int index = 0; index < this.days.length; index++) {
                             if (this.days[index] <= loginTimes) {
-                                keyBuilder.append(firstDate).append('\t').append(this.days[index]).append('\t')
+                                keyBuilder.append(firstDate).append(" 00:00:00").append('\t').append(this.days[index]).append('\t')
                                         .append(leaveType).append('\t').append(product).append('\t')
                                         .append(channelId).append('\t').append(platForm).append('\t')
                                         .append(productVersion);

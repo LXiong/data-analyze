@@ -78,14 +78,30 @@ public class UinChangeMapred {
                     String leave07Cnt = fieldValueMap.get("leave07Cnt");
                     String leave14Cnt = fieldValueMap.get("leave14Cnt");
                     String leave30Cnt = fieldValueMap.get("leave30Cnt");
-                    this.keyBuilder.append(uin).append('\t').append(firstDate).append('\t')
-                            .append(lastDate).append('\t').append(product).append('\t')
+                    this.keyBuilder.append(uin).append('\t').append(firstDate).append(" 00:00:00").append('\t')
+                            .append(lastDate).append(" 00:00:00").append('\t').append(product).append('\t')
                             .append(channelId).append('\t').append(platForm).append('\t')
                             .append(productVersion).append('\t').append(loginCnt).append('\t')
-                            .append(leave01Date).append('\t').append(leave01Cnt).append('\t')
-                            .append(leave07Date).append('\t').append(leave07Cnt).append('\t')
-                            .append(leave14Date).append('\t').append(leave14Cnt).append('\t')
-                            .append(leave30Date).append('\t').append(leave30Cnt);
+                            .append(leave01Date);
+                    if (leave01Date.isEmpty() == false) {
+                        this.keyBuilder.append(" 00:00:00");
+                    }
+                    this.keyBuilder.append('\t').append(leave01Cnt)
+                            .append('\t').append(leave07Date);
+                    if (leave07Date.isEmpty() == false) {
+                        this.keyBuilder.append(" 00:00:00");
+                    }
+                    this.keyBuilder.append('\t').append(leave07Cnt)
+                            .append('\t').append(leave14Date);
+                    if (leave14Date.isEmpty() == false) {
+                        this.keyBuilder.append(" 00:00:00");
+                    }
+                    this.keyBuilder.append('\t').append(leave14Cnt)
+                            .append('\t').append(leave30Date);
+                    if (leave30Date.isEmpty() == false) {
+                        this.keyBuilder.append(" 00:00:00");
+                    }
+                    this.keyBuilder.append('\t').append(leave30Cnt);
                     this.newKey.set(this.keyBuilder.toString());
                     this.keyBuilder.setLength(0);
                     //输出
