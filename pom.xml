@@ -35,7 +35,7 @@
         <!-- 外网cloudera中心库内网代理 -->
         <repository>
             <id>local.maven.com-cloudera</id>
-            <name>cloudera maven repository</name>
+            <name>cloudera maven repository proxy</name>
             <url>http://local.maven.com:8081/nexus/content/repositories/cloudera</url>
         </repository>
         <!-- cloudera中心库 -->

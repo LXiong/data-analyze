@@ -34,6 +34,9 @@ public class UinLifecycleIntervalJobStart extends AbstractJobStart {
         //初始化job
         final Job job = new Job(conf, "data-analyze-uin-lifecycle-interval");
         job.setJarByClass(UinLifecycleIntervalMapred.class);
+        job.setMapSpeculativeExecution(false);
+        job.setReduceSpeculativeExecution(false);
+        job.setNumReduceTasks(16);
         //初始化kerbros
         TableMapReduceUtil.initCredentials(job);
         //设置hbase输入

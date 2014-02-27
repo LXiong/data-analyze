@@ -181,7 +181,6 @@ public class ImeiLifecycleIntervalMapred {
                                 break;
                             }
                         }
-
                     }
                 }
             }
